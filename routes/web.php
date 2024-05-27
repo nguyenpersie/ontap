@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\MainController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\Users\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,10 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('admin/users/login',[LoginController::class,'index']);
 
-Route::get('/login', function () {
-    return view('login');
-});
+Route::post('admin/users/login',[LoginController::class,'login']);
+
+Route::get('admin/main', [MainController::class,'index'])->name('admin');
+// Route::get('/login', function () {
+//     return view('login');
+// });
