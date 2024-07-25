@@ -6,17 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Console\Input\Input;
+use Yoeunes\Toastr\Facades\Toastr;
+use Yoeunes\Toastr\Toastr as ToastrToastr;
 
 class LoginController extends Controller
 {
     public function index()
     {
         if (Auth::check()) {
-            return route('admin');
+            return redirect()->route('user.list');
         }
 
         return view('login', [
-            'title' => 'Dang nhap'
+            'title' => 'Đăng Nhập'
         ]);
     }
 
@@ -32,9 +34,17 @@ class LoginController extends Controller
             'password' => $request->input('password')
 
         ], $request->input('remember_token'))) {
-            return route('admin');
+            return redirect()->route('user.list');
         }
+        $request = Toastr()->error('email or password is incorrect');
 
-        return redirect()->back()->withErrors('MSG');
+        return redirect()->back();
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('admin/users/login');
+    }
+
 }

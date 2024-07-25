@@ -17,12 +17,20 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    
+
     protected $table = 'mst_users';
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
+        'group_role',
+        'verify_email',
+        'is_active',
+        'remember_token',
+        'is_delete',
+        'last_login_at',
+        'last_login_ip',
     ];
 
     /**
