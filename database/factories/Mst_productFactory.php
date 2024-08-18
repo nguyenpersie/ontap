@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
+class Mst_productFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,12 +19,13 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'is_active' => 1,
-            'group_role' => 1,
-            'password' => Hash::make(123123), // password
-            'remember_token' => Str::random(10),
+            'product_name' => fake()->name(),
+            'product_image' => fake()->imageUrl(180, 180),
+            'product_price' => fake()->numberBetween(1, 1000),
+            'deccription' => fake()->sentence(45),
+            'is_sales' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 
