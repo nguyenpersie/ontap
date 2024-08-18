@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
-    protected $table = 'mst_users';
+    protected $table = 'users';
     protected $fillable = [
         'id',
         'name',
