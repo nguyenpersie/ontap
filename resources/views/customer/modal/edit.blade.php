@@ -33,7 +33,7 @@
                         <label class="form-check-label col-sm-3">
                           <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="1" {{ ($customer->is_active == 1) ? 'checked' : null }}>Yes</label>
                           <label class="form-check-label">
-                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="0" {{ ($customer->is_active == 0) ? 'checked' : null }}>No</label>
+                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="2" {{ ($customer->is_active == 2) ? 'checked' : null }}>No</label>
                       </div>
                    </div>
                 </fieldset>

@@ -17,7 +17,7 @@ class LoginController extends Controller
             return redirect()->route('user.list');
         }
 
-        return view('login', [
+        return view('login.index', [
             'title' => 'Đăng Nhập'
         ]);
     }
@@ -44,7 +44,7 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('admin/users/login');
+        return redirect('login');
     }
 
 }

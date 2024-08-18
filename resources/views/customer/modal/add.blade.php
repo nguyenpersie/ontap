@@ -35,7 +35,7 @@
                         <label class="form-check-label col-sm-3">
                           <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="1" checked>Yes</label>
                           <label class="form-check-label">
-                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="0">No</label>
+                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="2">No</label>
                       </div>
                      </div>
                   </fieldset>

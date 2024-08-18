@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Services\UserService;
 use App\Http\Requests\CreateForRequest;
 use App\Http\Requests\UpdateForRequest;
+use App\Models\Mst_users;
 use Yoeunes\Toastr\Facades\Toastr;
 use Yoeunes\Toastr\Toastr as ToastrToastr;
 use App\Models\User;
@@ -28,12 +29,11 @@ class UserController extends Controller
         $getUsers = $this->userService->handleGetUsers();
 
          $getUsers = User::query()
-        ->orderBy('is_active','desc')
+        ->orderBy('is_active','asc')
         ->orderBy('group_role','asc')
-        ->paginate(20);
+        ->paginate(10);
 
-
-        return view('user', [
+        return view('user.list', [
             'title' => 'Trang quản lý user',
             'titleAdd' => 'Thêm User',
             'viewUsers' => $getUsers,
@@ -81,5 +81,39 @@ class UserController extends Controller
         $this->userService->handleDeleteUser($modelUser);
 
         return redirect()->back()->with('success', 'User deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $fromEmail = $request->input('fromEmail');
+        $groupRole = $request->input('groupRole');
+        $isActive = $request->input('isActive');
+
+        $viewUsers = User::query();
+
+            if (!empty($search)) {
+                $viewUsers = $viewUsers->where('name', 'LIKE', "%{$search}%");
+            }
+
+            if (!empty($fromEmail)) {
+                $viewUsers = $viewUsers->orWhere('email', 'LIKE', "%{$fromEmail}%");
+            }
+
+            if (!empty($groupRole)) {
+                $viewUsers = $viewUsers->orWhere('group_role', 'LIKE', "%{$groupRole}%");
+            }
+
+            if (!empty($isActive)) {
+                $viewUsers = $viewUsers->orWhere('is_active', 'LIKE', "%{$isActive}%");
+            }
+
+            $viewUsers = $viewUsers->paginate(10);
+
+        return view('user.list', [
+            'title' => 'Trang quản lý user',
+            'titleAdd' => 'Thêm User',
+            'viewUsers' => $viewUsers,
+        ]);
     }
 }

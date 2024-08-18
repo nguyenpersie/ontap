@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mst_products', function (Blueprint $table) {
-            $table->string('product_id',20)->unique()->index();
+            $table->increments('product_id',20)->unique()->index();
             $table->string('product_name',255);
             $table->string('product_image',255)->nullable();
             $table->decimal('product_price')->default(0);

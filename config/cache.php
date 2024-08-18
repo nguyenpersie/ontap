@@ -32,9 +32,9 @@ return [
     */
 
     'stores' => [
-
-        'apc' => [
-            'driver' => 'apc',
+        'file' => [
+        'driver' => 'file',
+        'path' => storage_path('framework/cache'),
         ],
 
         'array' => [

@@ -63,10 +63,10 @@ class CreateForRequest extends FormRequest
     {
         return [
             'product_name' => 'required',
-            'product_image' => 'required|mimes:jpeg,jpg,png|max:10000',
             'product_price' => 'required|numeric',
             'is_sales' => 'required|in:1,2,3',
             'deccription' => 'required',
+            'product_image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 
