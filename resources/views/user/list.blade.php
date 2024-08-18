@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>{{$title}}</title>
-    @include('layout.header')
-</head>
-<body>
-<div class="container">
-@include('layout.tabitem')
-@include('alert')
+@extends('layout.master')
+@section('title', 'Quan Ly Product')
+@section('content')
+
 <div class="row mb-3">
     <div class="col-md-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreate">
@@ -125,6 +119,4 @@
 <!-- Button trigger modal -->
 <!-- Modal -->
 @include('user.modal.add')
-@include('layout.footer')
-</body>
-</html>
+@endsection

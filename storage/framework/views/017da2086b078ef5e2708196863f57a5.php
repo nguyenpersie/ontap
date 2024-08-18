@@ -114,14 +114,13 @@
 
     </div>
 
-    
     <?php echo $__env->make('product.modal.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startSection('extra-script'); ?>
 <script>
-
     function showEdit(id) {
+        $('#modal-edit').modal('show')
+
         // $("#loading").show()
         const url = "<?php echo e(route('product.edit', ['id' => ':id'])); ?>".replace(":id", id);
         $.ajax({
@@ -130,7 +129,7 @@
             processData: false,
             success: function(response) {
                 // $("#loading").hide()
-                $("#modal-edit").html(response.html)
+                // $("#modal-edit").html(response.html)
                 // $('#modal-edit').modal('show')
             },
             error: function(response) {
@@ -140,8 +139,6 @@
         })
     }
 </script>
-
-<?php $__env->stopSection(); ?>
 
 
 <?php echo $__env->make('layout.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/review/resources/views/product/list.blade.php ENDPATH**/ ?>

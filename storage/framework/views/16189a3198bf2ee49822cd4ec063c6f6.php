@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title><?php echo e($title); ?></title>
-    <?php echo $__env->make('layout.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-</head>
-<body>
-<div class="container">
-<?php echo $__env->make('layout.tabitem', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+<?php $__env->startSection('title', 'Quan Ly Product'); ?>
+<?php $__env->startSection('content'); ?>
+
 <div class="row mb-3">
     <div class="col-md-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreate">
@@ -126,7 +120,6 @@
 <!-- Button trigger modal -->
 <!-- Modal -->
 <?php echo $__env->make('user.modal.add', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('layout.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-</body>
-</html>
-<?php /**PATH /var/www/review/resources/views/user/list.blade.php ENDPATH**/ ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/review/resources/views/user/list.blade.php ENDPATH**/ ?>
