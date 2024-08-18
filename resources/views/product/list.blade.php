@@ -117,26 +117,24 @@
     @include('product.modal.edit')
 @endsection
 
-<script>
-    function showEdit(id) {
-        $('#modal-edit').modal('show')
-
-        // $("#loading").show()
-        const url = "{{ route('product.edit', ['id' => ':id']) }}".replace(":id", id);
-        $.ajax({
-            url: url,
-            type: "GET",
-            processData: false,
-            success: function(response) {
-                // $("#loading").hide()
-                // $("#modal-edit").html(response.html)
-                // $('#modal-edit').modal('show')
-            },
-            error: function(response) {
-                // $("#loading").hide()
-                console.log(response)
-            }
-        })
-    }
-</script>
+@section('extra-script')
+    <script>
+        function showEdit(id) {
+            const url = "{{ route('product.edit', ['id' => ':id']) }}".replace(":id", id);
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(response) {
+                    $("#loading").hide()
+                    $("#modalEdit").html(response.html)
+                    $('#modalEdit').modal('show')
+                },
+                error: function(response) {
+                    // $("#loading").hide()
+                    console.log(response)
+                }
+            })
+        }
+    </script>
+@endsection
 

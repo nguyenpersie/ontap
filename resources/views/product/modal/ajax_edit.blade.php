@@ -1,54 +1,56 @@
-<div class="modal-header">
-    <h1 class="modal-title fs-5" id="modaleditLabel{{ $product->product_id }}">Edit</h1>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-</div>
-<div class="modal-body">
-    <div class="row">
-        <!-- Cột bên trái -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="product_name" class="form-label">Tên sản phẩm</label>
-                <input type="text" class="form-control" id="product_name_{{ $product->product_id }}" name="product_name" value="{{ $product->product_name }}">
-            </div>
-            <div class="mb-3">
-                <label for="product_price" class="form-label">Giá bán</label>
-                <input type="text" class="form-control" id="product_price_{{ $product->product_id }}" name="product_price" placeholder="VND" value="{{ $product->product_price }}">
-            </div>
-            <div class="mb-3">
-                <label for="deccription" class="form-label">Mô tả</label>
-                <textarea name="deccription" id="deccription_{{ $product->product_id }}" cols="20" rows="3" class="form-control">{{ $product->deccription }}</textarea>
-            </div>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modaleditLabel{{ $product->product_id }}">Edit</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+            <div class="row">
+                <!-- Cột bên trái -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="product_name" class="form-label">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="product_name_{{ $product->product_id }}" name="product_name" value="{{ $product->product_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="product_price" class="form-label">Giá bán</label>
+                        <input type="text" class="form-control" id="product_price_{{ $product->product_id }}" name="product_price" placeholder="VND" value="{{ $product->product_price }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deccription" class="form-label">Mô tả</label>
+                        <textarea name="deccription" id="deccription_{{ $product->product_id }}" cols="20" rows="3" class="form-control">{{ $product->deccription }}</textarea>
+                    </div>
+                </div>
 
-        <!-- Cột bên phải -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="is_sales" class="form-label">Trạng thái</label>
-                <select class="form-select" id="is_sales_{{ $product->product_id }}" aria-label="Default select example" name="is_sales">
-                    <option selected style="user-select: none">Trạng thái</option>
-                    <option value="1" {{ $product->is_sales == 1 ? 'selected' : '' }}>Đang bán</option>
-                    <option value="2" {{ $product->is_sales == 2 ? 'selected' : '' }}>Ngừng bán</option>
-                    <option value="3" {{ $product->is_sales == 3 ? 'selected' : '' }}>Hết hàng</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <div class="error_success_msg_container my-3"></div>
+                <!-- Cột bên phải -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="is_sales" class="form-label">Trạng thái</label>
+                        <select class="form-select" id="is_sales_{{ $product->product_id }}" aria-label="Default select example" name="is_sales">
+                            <option selected style="user-select: none">Trạng thái</option>
+                            <option value="1" {{ $product->is_sales == 1 ? 'selected' : '' }}>Đang bán</option>
+                            <option value="2" {{ $product->is_sales == 2 ? 'selected' : '' }}>Ngừng bán</option>
+                            <option value="3" {{ $product->is_sales == 3 ? 'selected' : '' }}>Hết hàng</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <div class="error_success_msg_container my-3"></div>
 
-                <img src="{{ asset($product->product_image) }}" width="200px" height="200px" id="image_preview_{{ $product->product_id }}">
+                        <img src="{{ asset($product->product_image) }}" width="200px" height="200px" id="image_preview_{{ $product->product_id }}">
 
-                <div class="form-group mt-3">
-                    <input class="form-control" type="file" name="product_image" id="imageEdit_{{ $product->product_id }}">
+                        <div class="form-group mt-3">
+                            <input class="form-control" type="file" name="product_image" id="imageEdit_{{ $product->product_id }}">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+        </div>
     </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-    <button type="submit" class="btn btn-primary">Lưu</button>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     $(document).ready(function() {
