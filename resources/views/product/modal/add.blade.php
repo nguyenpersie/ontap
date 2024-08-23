@@ -4,7 +4,7 @@
       <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
               <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ $titleAdd }}</h1>
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Add product</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -39,7 +39,7 @@
                           <div class="mb-3">
                             <form id="image_upload_formAdd" method="" action="" enctype="multipart/form-data">
                                 <div class="error_success_msg_containerAdd my-3"></div>
-                                    <img src="" width="200px" height="200px" class="image_previewAdd">
+                                    <img src="" width="200px" height="200px" id="image_previewAdd" class="image_previewAdd">
                                     <div class="form-group mt-3">
                                         <input class="form-control" type="file" name="product_image" id="imageAdd">
                                     </div>
@@ -54,5 +54,21 @@
       </div>
   </div>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script>
+$(document).on("change", "#imageAdd", function () {
+        $(".error_success_msg_containerAdd").html("");
+        if (this.files && this.files[0]) {
+            let img = document.querySelector(".image_previewAdd");
+            img.onload = () => {
+                URL.revokeObjectURL(img.src);
+            };
+            img.src = URL.createObjectURL(this.files[0]);
+            document.querySelector(".image_previewAdd").files = this.files;
+        }
+    });
+</script>
 
 

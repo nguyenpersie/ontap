@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\CustomersExport;
+use App\Exports\NotifyUserOfCompletedExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateForRequest;
 use App\Http\Requests\UpdateForRequest;
@@ -32,7 +33,6 @@ class CustomerController extends Controller
         ->paginate(10);
 
         return view('customer.list', [
-            'title' => 'Trang quản lý khách hàng',
             'titleAdd' =>'Thêm khách hàng',
             'titleEdit' =>'Chỉnh sửa khách hàng',
             'viewCustomers' => $getCustomers,
@@ -113,11 +113,16 @@ class CustomerController extends Controller
 
     public function export()
     {
-        return Excel::download(new CustomersExport, 'customers.xlsx');
+        //return Excel::download(new CustomersExport, 'customers.csv', \Maatwebsite\Excel\Excel::CSV);
+
+        (new CustomersExport)->queue('customers.csv')->allOnQueue('ExportsCustomer');
+
+        return back()->withSuccess('Export started!');
     }
 
     public function import(Request $request)
     {
+        $start = microtime(true);
                 // Validate the request
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv'
@@ -127,17 +132,26 @@ class CustomerController extends Controller
         $file = $request->file('file');
         $filename = $file->getClientOriginalName();
 
-        $filePath = storage_path('imports/' . $filename);
+        $filePath = storage_path('/app/imports/' . $filename);
 
         $file->storeAs('imports', $filename);
 
         try {
             // Import the data from the file
-            Excel::import(new CustomersImport, $filePath);
+            // Excel::queueImport(new CustomersImport, $filePath);
+
+            Excel::queueImport(new CustomersImport, $filePath)->onQueue('ImportsCustomer');
+
+            $end = microtime(true);
+            $executionTime = round($end - $start, 3);
+            \Log::debug('Command html decode translation. Spend time: ' . $executionTime . 's');
 
             // Return a success message
             return redirect()->back()->with('success', 'Import customers successfully.');
         } catch (\Exception $e) {
+            $end = microtime(true);
+            $executionTime = round($end - $start, 3);
+            \Log::debug('Command html decode translation. Spend time: ' . $executionTime . 's');
             // Return an error message
             return redirect()->back()->with('error', 'Error importing CSV file: ' . $e->getMessage());
         }
@@ -152,38 +166,25 @@ class CustomerController extends Controller
 
     public function cusSearch(Request $request)
     {
-        $search = $request->input('search');
-        $fromEmail = $request->input('fromEmail');
-        $isActive = $request->input('isActive');
-        $fromAddress = $request->input('fromAddress');
+        $filters = [
+            'customer_name' => $request->input('search'),
+            'email' => $request->input('fromEmail'),
+            'is_active' => $request->input('isActive'),
+            'address' => $request->input('fromAddress'),
+        ];
 
         $viewCustomers = Mst_customer::query();
 
-            if (!empty($search)) {
-                $viewCustomers = $viewCustomers->where('customer_name', 'LIKE', "%{$search}%");
+        foreach ($filters as $column => $value) {
+            if (!empty($value)) {
+                $viewCustomers->orWhere($column, 'LIKE', "%{$value}%");
             }
+        }
 
-            if (!empty($fromEmail)) {
-                $viewCustomers = $viewCustomers->orWhere('email', 'LIKE', "%{$fromEmail}%");
-            }
-
-            if (!empty($isActive)) {
-                $viewCustomers = $viewCustomers->orWhere('is_active', 'LIKE', "%{$isActive}%");
-            }
-
-            if (!empty($fromAddress)) {
-                $viewCustomers = $viewCustomers->orWhere('address', 'LIKE', "%{$fromAddress}%");
-            }
-
-            $viewCustomers = $viewCustomers->paginate(10);
+        $viewCustomers = $viewCustomers->paginate(10);
 
         return view('customer.list', [
-            'title' => 'Trang quản lý khách hàng',
-            'titleAdd' =>'Thêm khách hàng',
-            'titleEdit' =>'Chỉnh sửa khách hàng',
             'viewCustomers' => $viewCustomers,
         ]);
     }
-
-
 }

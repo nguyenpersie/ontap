@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive" id="listData">
         <table class="table table-Secondary table-hover">
             <div>
                 <thead>
@@ -72,42 +72,41 @@
                         <th>Tên sản phẩm</th>
                         <th>Mô tả</th>
                         <th>Giá</th>
-                        <th>Tình trạng</th>
-                        <th></th>
+                        <th style="width: 110px">Tình trạng</th>
+                        <th style="width: 180px">Hành động</th>
                     </tr>
-                    </thead>
-                    @foreach ($viewProducts as $product)
-                    <tbody>
-                        <tr>
-                        <td>{{ ($viewProducts->currentPage() - 1) * $viewProducts->perPage() + $loop->iteration }}</td>
-                        <td>{{ $product->product_name }}</td>
-                        <td>{{ $product->deccription }}</td>
-                        <td>{{ $product->product_price }} $</td>
-                        <td>
-                            @if ($product->is_sales == 2)
-                                <option value="2" class="text-danger">Ngừng bán</option>
-                            @elseif ($product->is_sales > 2)
-                                <option value="3" class="text-dark">Hết hàng</option>
-                            @elseif ($product->is_sales < 2)
-                                <option value="1" class="text-success">Đang bán</option>
-                            @else
-                            @endif
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-success btn-sm mb-2 w-full"
-                                onclick="showEdit({{ $product->product_id }})">
-                                <i class="fas fa-edit"></i>
-                                Edit
-                            </button>
+                </thead>
+                @foreach ($viewProducts as $product)
+                <tbody>
+                    <tr>
+                    <td>{{ ($viewProducts->currentPage() - 1) * $viewProducts->perPage() + $loop->iteration }}</td>
+                    <td class="name-column">{{ $product->product_name }}</td>
+                    <td class="description-column">{{ $product->deccription }}</td>
+                    <td>${{ $product->product_price }}</td>
+                    <td>
+                        @if ($product->is_sales == 2)
+                            <option value="2" class="text-danger">Ngừng bán</option>
+                        @elseif ($product->is_sales > 2)
+                            <option value="3" class="text-dark">Hết hàng</option>
+                        @elseif ($product->is_sales < 2)
+                            <option value="1" class="text-success">Đang bán</option>
+                        @else
+                        @endif
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info btn-custom btn-sm w-full"
+                            onclick="showEdit({{ $product->product_id }})">
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </button>
 
-                            <a href="{{ route('product.delete', ['id' => $product->product_id]) }}" class="btn btn-outline-danger btn-custom">Delete</a>
-                        </td>
-                        </tr>
-                    </tbody>
-                    @endforeach
+                        <a href="{{ route('product.delete', ['id' => $product->product_id]) }}" class="btn btn-outline-danger btn-custom">Delete</a>
+                    </td>
+                    </tr>
+                </tbody>
+                @endforeach
             </div>
         </table>
-
     </div>
     </div>
     <div class="d-flex justify-content-center">
@@ -115,6 +114,7 @@
     </div>
 
     @include('product.modal.edit')
+    @include('product.modal.add')
 @endsection
 
 @section('extra-script')
@@ -125,7 +125,7 @@
                 url: url,
                 type: "GET",
                 success: function(response) {
-                    $("#loading").hide()
+                    // $("#loading").hide()
                     $("#modalEdit").html(response.html)
                     $('#modalEdit').modal('show')
                 },
@@ -135,6 +135,21 @@
                 }
             })
         }
+
+        $(document).ready(function(){
+            $.ajax({
+                url: "{{ route('product.list') }}",
+                type: "GET",
+                success: function(response) {
+                    // $("#loading").hide()
+                    $("#listData").html(response.html)
+                },
+                error: function(response) {
+                    // $("#loading").hide()
+                    console.log(response)
+                }
+            })
+        });
     </script>
 @endsection
 

@@ -1,54 +1,56 @@
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="modaleditLabel{{ $product->product_id }}">Edit</h1>
+            <h1 class="modal-title fs-5" id="modaleditLabel{{ $product->product_id }}">Edit product</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            <div class="row">
-                <!-- Cột bên trái -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="product_name" class="form-label">Tên sản phẩm</label>
-                        <input type="text" class="form-control" id="product_name_{{ $product->product_id }}" name="product_name" value="{{ $product->product_name }}">
+        <form class="image_upload_form" action="" method="" data-product_id="{{ $product->product_id }}">
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Cột bên trái -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="product_name" class="form-label">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="product_name_{{ $product->product_id }}" name="product_name" value="{{ $product->product_name }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="product_price" class="form-label">Giá bán</label>
+                            <input type="text" class="form-control" id="product_price_{{ $product->product_id }}" name="product_price" placeholder="VND" value="{{ $product->product_price }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="deccription" class="form-label">Mô tả</label>
+                            <textarea name="deccription" id="deccription_{{ $product->product_id }}" cols="20" rows="3" class="form-control">{{ $product->deccription }}</textarea>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="product_price" class="form-label">Giá bán</label>
-                        <input type="text" class="form-control" id="product_price_{{ $product->product_id }}" name="product_price" placeholder="VND" value="{{ $product->product_price }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="deccription" class="form-label">Mô tả</label>
-                        <textarea name="deccription" id="deccription_{{ $product->product_id }}" cols="20" rows="3" class="form-control">{{ $product->deccription }}</textarea>
-                    </div>
-                </div>
 
-                <!-- Cột bên phải -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="is_sales" class="form-label">Trạng thái</label>
-                        <select class="form-select" id="is_sales_{{ $product->product_id }}" aria-label="Default select example" name="is_sales">
-                            <option selected style="user-select: none">Trạng thái</option>
-                            <option value="1" {{ $product->is_sales == 1 ? 'selected' : '' }}>Đang bán</option>
-                            <option value="2" {{ $product->is_sales == 2 ? 'selected' : '' }}>Ngừng bán</option>
-                            <option value="3" {{ $product->is_sales == 3 ? 'selected' : '' }}>Hết hàng</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <div class="error_success_msg_container my-3"></div>
+                    <!-- Cột bên phải -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="is_sales" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="is_sales_{{ $product->product_id }}" aria-label="Default select example" name="is_sales">
+                                <option selected style="user-select: none">Trạng thái</option>
+                                <option value="1" {{ $product->is_sales == 1 ? 'selected' : '' }}>Đang bán</option>
+                                <option value="2" {{ $product->is_sales == 2 ? 'selected' : '' }}>Ngừng bán</option>
+                                <option value="3" {{ $product->is_sales == 3 ? 'selected' : '' }}>Hết hàng</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <div class="error_success_msg_container my-3"></div>
 
-                        <img src="{{ asset($product->product_image) }}" width="200px" height="200px" id="image_preview_{{ $product->product_id }}">
+                            <img src="{{ asset($product->product_image) }}" width="200px" height="200px" id="image_preview_{{ $product->product_id }}">
 
-                        <div class="form-group mt-3">
-                            <input class="form-control" type="file" name="product_image" id="imageEdit_{{ $product->product_id }}">
+                            <div class="form-group mt-3">
+                                <input class="form-control" type="file" name="product_image" id="imageEdit_{{ $product->product_id }}">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="submit" class="btn btn-primary">Lưu</button>
-        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -103,6 +105,9 @@
                 url: "{{ route('product.update.post', $product->product_id) }}",  //$(this).attr("action"),
                 method: "POST",
                 data: form_data,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -110,7 +115,7 @@
                     console.log(form_data);
                     for (var pair of form_data.entries()) {
                     console.log(pair[0] + ': ' + pair[1]);
-    }
+                    }
                     $(".error_success_msg_container").html("");
                     $(".image_preview").hide();
 
@@ -124,6 +129,7 @@
                         // close modal
                         $(".modal.fade").modal('hide');
                         $(".modal-backdrop").remove();
+                        location.reload();
                     }
                 },
                 error: function (err) {

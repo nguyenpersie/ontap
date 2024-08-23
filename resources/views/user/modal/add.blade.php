@@ -1,12 +1,10 @@
-
-
 <form action="{{ route('user.add.post') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="modal fade" id="modalCreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ $titleAdd }}</h1>
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Add user</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -40,9 +38,9 @@
                     <div class="col-sm-10">
                       <div class="form-check">
                         <label class="form-check-label col-sm-3">
-                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="1" checked>Yes</label>
+                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active_1" value="1" checked>Yes</label>
                           <label class="form-check-label">
-                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active" value="2">No</label>
+                          <input class="form-check-input radio-inline" type="radio" name="is_active" id="is_active_2" value="2">No</label>
                       </div>
                      </div>
                   </fieldset>

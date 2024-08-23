@@ -21,16 +21,11 @@ class ProductController extends Controller
 
     public function index()
     {
-        $getProducts = $this->productService->handleGetProducts();
-
         $getProducts = Mst_product::query()
-            ->orderBy('is_sales','asc')
-            ->paginate(20);
+        ->orderBy('is_sales','asc')
+        ->paginate(1000);
 
         return view('product.list', [
-            'title' => 'Trang quản lý sản phẩm',
-            'titleAdd' =>'Thêm sản phẩm',
-            'titleEdit' =>'Chỉnh sửa sản phẩm',
             'viewProducts' => $getProducts,
         ]);
     }
@@ -101,7 +96,7 @@ class ProductController extends Controller
         $this->productService->handleUpdateProduct($modelProduct, $productData);
 
         if ($request->ajax()) {
-            return response()->json(['status' => 'success']);
+            return response()->json(['status' => 'success', 'reload' => true]);
         }
     }
 
@@ -121,35 +116,32 @@ class ProductController extends Controller
 
     public function proSearch(Request $request)
     {
-        $search = $request->input('search');
-        $isSales = $request->input('isSales');
-        $priceFrom = $request->input('priceFrom');
-        $priceTo = $request->input('priceTo');
+        $filters = [
+            'product_name' => $request->input('search'),
+            'product_price' => [
+                'from' => $request->input('priceFrom'),
+                'to' => $request->input('priceTo'),
+            ],
+            'is_sales' => $request->input('isSales'),
+        ];
 
         $viewProducts = Mst_product::query();
 
-        if (!empty($search)) {
-            $viewProducts = $viewProducts->where('product_name', 'LIKE', "%{$search}%");
+        foreach ($filters as $column => $value) {
+            if (is_array($value)) {
+                if (!empty($value['from'])) {
+                    $viewProducts->where($column, '>=', $value['from']);
+                }
+                if (!empty($value['to'])) {
+                    $viewProducts->where($column, '<=', $value['to']);
+                }
+            } elseif (!empty($value)) {
+                $viewProducts->orWhere($column, 'LIKE', "%{$value}%");
+            }
         }
-
-        if (!empty($priceFrom)) {
-            $viewProducts = $viewProducts->where('product_price', '>=', $priceFrom);
-        }
-
-        if (!empty($priceTo)) {
-            $viewProducts = $viewProducts->where('product_price', '<=', $priceTo);
-        }
-
-        if (!empty($isSales)) {
-            $viewProducts = $viewProducts->orWhere('is_sales', 'LIKE', "%{$isSales}%");
-        }
-
         $viewProducts = $viewProducts->paginate(10);
 
         return view('product.list', [
-            'title' => 'Trang quản lý sản phẩm',
-            'titleAdd' =>'Thêm sản phẩm',
-            'titleEdit' =>'Chỉnh sửa sản phẩm',
             'viewProducts' => $viewProducts,
         ]);
     }

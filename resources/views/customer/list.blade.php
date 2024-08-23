@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Quan Ly Product')
+@section('title', 'Quan Ly Customer')
 @section('content')
 
 <div class="row mb-3">
@@ -87,7 +87,7 @@
                     <th>Email</th>
                     <th>Địa chỉ</th>
                     <th>Điện thoại</th>
-                    <th></th>
+                    <th style="width: 150px;">Hành động</th>
                     </tr>
                 </thead>
                 {{-- @foreach ($viewCustomers as $index => $customer)
@@ -109,36 +109,38 @@
                 <tbody>
                     <tr>
                         <td>{{ ($viewCustomers->currentPage() - 1) * $viewCustomers->perPage() + $loop->iteration }}</td></td>
-                        <td>
+                        <td class="name-column">
                             <span id="customer_name_{{ $customer->customer_id }}">{{ $customer->customer_name }}</span>
                             <input type="text" id="customer_name_input_{{ $customer->customer_id }}" value="{{ $customer->customer_name }}" style="display: none;" class="form-control">
                         </td>
-                        <td>
+                        <td class="email-column">
                             <span id="email_{{ $customer->customer_id }}">{{ $customer->email }}</span>
                             <input type="email" id="email_input_{{ $customer->customer_id }}" value="{{ $customer->email }}" style="display: none;" class="form-control">
                         </td>
-                        <td>
+                        <td class="address-column">
                             <span id="address_{{ $customer->customer_id }}">{{ $customer->address }}</span>
                             <input type="text" id="address_input_{{ $customer->customer_id }}" value="{{ $customer->address }}" style="display: none;" class="form-control">
                         </td>
-                        <td>
+                        <td class="tel-column">
                             <span id="tel_num_{{ $customer->customer_id }}">{{ $customer->tel_num }}</span>
                             <input type="text" id="tel_num_input_{{ $customer->customer_id }}" value="{{ $customer->tel_num }}" style="display: none;" class="form-control">
                         </td>
                         <td>
-                            <a href="#" class="btn btn-outline-info btn-custom" id="edit_button_{{ $customer->customer_id }}" onclick="editCustomer({{ $customer->customer_id }}, event)">Edit</a>
-                            <a href="#" class="btn btn-outline-success btn-custom" id="save_button_{{ $customer->customer_id }}" onclick="saveCustomer({{ $customer->customer_id }})" style="display: none;">Save</a>
-                            <a href="#" class="btn btn-outline-danger btn-custom" id="cancel_button_{{ $customer->customer_id }}" onclick="cancelEdit({{ $customer->customer_id }}, event)" style="display: none;">Cancel</a>
+                            <div style="display: flex; justify-content: center; align-items: center;">
+                                <a href="#" class="btn btn-outline-info btn-custom" id="edit_button_{{ $customer->customer_id }}" onclick="editCustomer({{ $customer->customer_id }}, event)">Edit</a>
+                                <a href="#" class="btn btn-outline-success btn-custom" id="save_button_{{ $customer->customer_id }}" onclick="saveCustomer({{ $customer->customer_id }})" style="display: none;">Save</a>
+                                <a href="#" class="btn btn-outline-danger btn-custom" id="cancel_button_{{ $customer->customer_id }}" onclick="cancelEdit({{ $customer->customer_id }}, event)" style="display: none;">Cancel</a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             @endforeach
 <script>
     function editCustomer(id, event) {
-        event.preventDefault();
         // Stop event propagation to prevent scrolling up
         if (event)
         {
+            event.preventDefault();
 
             //event.stopPropagation();
         }
@@ -227,7 +229,6 @@
             },
             success: function(response) {
                 if (response.success) {
-                    toastr.success('Customer updated successfully!');
                     // Update the display fields with the new values
                     $('#' + 'customer_name_' + id).text(customerNameInput);
                     $('#' + 'email_' + id).text(emailInput);
@@ -246,6 +247,8 @@
                     $('#' + 'edit_button_' + id).show();
                     $('#' + 'save_button_' + id).hide();
                     $('#' + 'cancel_button_' + id).hide();
+
+                    toastr.success('Customer updated successfully!');
                 } else {
                     toastr.error('Error updating customer!');
                 }
@@ -257,9 +260,9 @@
     }
 }
 </script>
-</div>
 <div class="d-flex justify-content-center">
     {{ $viewCustomers->appends(request()->except('page'))->links('vendor.pagination.bootstrap-5') }}
+</div>
 </div>
 <!-- Button trigger modal -->
 <!-- Modal -->

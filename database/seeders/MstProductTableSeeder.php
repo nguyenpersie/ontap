@@ -14,6 +14,6 @@ class MstProductTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Mst_product::factory()->count(50)->create();
+        Mst_product::factory()->count(9950)->create();
     }
 }

@@ -34,8 +34,6 @@ class UserController extends Controller
         ->paginate(10);
 
         return view('user.list', [
-            'title' => 'Trang quản lý user',
-            'titleAdd' => 'Thêm User',
             'viewUsers' => $getUsers,
         ]);
     }
@@ -50,6 +48,22 @@ class UserController extends Controller
         $this->userService->handleCreateUser($request->input());
 
         return redirect()->back()->with('success', 'User create successfully.');
+    }
+
+    public function ShowUser($id)
+    {
+        $data =  $this->userService->handleGetUser($id);
+
+        if (empty($data)) {
+            return respondWithJsonError(DATA_NOT_FOUND, NOT_FOUND_CODE);
+        }
+
+        $html = view('user.modal.ajax_edit', [
+            'user' => $data,
+        ])->render();
+
+
+        return response()->json([ 'html' => $html]);
     }
 
     public function updateUser(UpdateForRequest $request, $id)
@@ -85,34 +99,25 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-        $search = $request->input('search');
-        $fromEmail = $request->input('fromEmail');
-        $groupRole = $request->input('groupRole');
-        $isActive = $request->input('isActive');
+        $query = User::query();
 
-        $viewUsers = User::query();
+        $filters = [
+            'name' => $request->input('search'),
+            'email' => $request->input('fromEmail'),
+            'group_role' => $request->input('groupRole'),
+            'is_active' => $request->input('isActive'),
+        ];
 
-            if (!empty($search)) {
-                $viewUsers = $viewUsers->where('name', 'LIKE', "%{$search}%");
+        foreach ($filters as $column => $value) {
+            if (!empty($value)) {
+                $query->orWhere($column, 'LIKE', "%{$value}%");
             }
-
-            if (!empty($fromEmail)) {
-                $viewUsers = $viewUsers->orWhere('email', 'LIKE', "%{$fromEmail}%");
-            }
-
-            if (!empty($groupRole)) {
-                $viewUsers = $viewUsers->orWhere('group_role', 'LIKE', "%{$groupRole}%");
-            }
-
-            if (!empty($isActive)) {
-                $viewUsers = $viewUsers->orWhere('is_active', 'LIKE', "%{$isActive}%");
-            }
-
-            $viewUsers = $viewUsers->paginate(10);
+        }
+        // $query->orderBy('group_role', 'ASC')
+        //         ->orderBy('is_active', 'ASC');
+        $viewUsers = $query->paginate(10);
 
         return view('user.list', [
-            'title' => 'Trang quản lý user',
-            'titleAdd' => 'Thêm User',
             'viewUsers' => $viewUsers,
         ]);
     }
